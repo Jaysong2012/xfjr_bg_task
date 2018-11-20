@@ -20,3 +20,8 @@ class Utils:
     @staticmethod
     def str_md5(data):
         return hashlib.md5(data.encode(encoding='UTF-8')).hexdigest()
+
+    @staticmethod
+    def log(content):
+        with open('/data/logs/xfjr_bg_task/info.log','w') as f:
+            f.write(content)

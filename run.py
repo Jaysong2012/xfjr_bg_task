@@ -112,11 +112,11 @@ def send_day_report():
     print('邮件发送成功')
 
 def test_job():
-    print(DateTimeUtil.datetime_to_strtime(datetime.datetime.now()),'heart beat')
+    Utils.log(DateTimeUtil.datetime_to_strtime(datetime.datetime.now())+'heart beat')
 
 if __name__ == '__main__':
     # 挂载任务
-    print('start')
+    Utils.log('start')
     scheduler = Scheduler.get_sched()
     #send_day_report()
     scheduler.add_job(func=send_day_report, trigger='cron',hour=2,minute=18)
