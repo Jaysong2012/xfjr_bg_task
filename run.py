@@ -43,7 +43,7 @@ def day_report():
         ranges_detail['key'] = DateTimeUtil.timestamp_to_strtime((two_day_ago_begin_timestamp + i * day_timestamp_duration),'%Y-%m-%d')
         ranges.append(ranges_detail)
 
-    print(ranges)
+    Utils.log(ranges)
 
     return AppLog.get_range_general(two_day_ago_begin_timestamp, today_begin_timestamp, ranges)
 
@@ -109,7 +109,7 @@ def send_day_report():
     '''
     #print(json.dumps(time_key_report_list, ensure_ascii=False))
     Mail.html_send(subject="六合一API调用概览", msg=MIMEText((html_start+html_body+html_end), _subtype='html',  _charset='utf-8'),to=['xfjr_server@maimob.cn'])
-    print('邮件发送成功')
+    Utils.log('邮件发送成功')
 
 def test_job():
     Utils.log(DateTimeUtil.datetime_to_strtime(datetime.datetime.now())+'heart beat')

@@ -23,5 +23,5 @@ class Utils:
 
     @staticmethod
     def log(content):
-        with open('/data/logs/xfjr_bg_task/info.log','w') as f:
+        with open('/data/logs/xfjr_bg_task/info.log','a') as f:
             f.write(content)
