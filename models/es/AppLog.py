@@ -1,12 +1,8 @@
 from libraries.Utils import Utils
 from libraries.Constants import RETURN_CODE_MSG_ENUM_DICT
 class AppLog:
+
     index   = 'app_log'
-
-    @classmethod
-    def get_yestoday_general(cls):
-        es = Utils.get_es_client()
-
 
     @classmethod
     def get_range_general(cls,gte,lte,ranges):
@@ -50,6 +46,7 @@ class AppLog:
                 }
             }
         }
+        print(query)
         try:
             res = es.search(index=cls.index, doc_type=cls.index, body=query)
         except Exception as e:
@@ -58,18 +55,15 @@ class AppLog:
         if res == None:
             return
         buckets = res['aggregations']['timestamp_range']['buckets']
-
-        hour_report_list = []
+        time_key_report_list = []
         for k, v in buckets.items():
             hour_report = {}
             hour_report['time_key'] = k
             hour_report['from'] = v['from']
             hour_report['to'] = v['to']
             hour_report['doc_count'] = v['doc_count']
-
             call_stat_list = []
             call_stat_buckets = v['call_terms']['buckets']
-
             for bucket in call_stat_buckets:
                 call_detail = {}
                 return_detail_list = []
@@ -80,16 +74,13 @@ class AppLog:
                     return_detail = {}
                     return_detail['return_code'] = returncode_bucket['key']
                     return_detail['return_msg'] = RETURN_CODE_MSG_ENUM_DICT.get(str(returncode_bucket['key']), 'UnKnow')
-                    return_detail['return_num'] = returncode_bucket['doc_count']
+                    return_detail['return_num'] = str(returncode_bucket['doc_count']) + '    ('+str(int(int(returncode_bucket['doc_count']) * 100 / int(bucket['doc_count'])))+'%)'
                     return_detail_list.append(return_detail)
-
                 call_detail['return_stat'] = return_detail_list
                 call_stat_list.append(call_detail)
             hour_report['call_stat'] = call_stat_list
-            hour_report_list.append(hour_report)
-
-
-        return hour_report_list
+            time_key_report_list.append(hour_report)
+        return time_key_report_list
 
     @classmethod
     def get_timestamp_range_general(cls,gte,lte):
@@ -127,18 +118,14 @@ class AppLog:
                 }
             }
         }
-
         try:
             res = es.search(index=cls.index, doc_type=cls.index, body=query)
         except Exception as e:
             res = None
             print(' 查询失败 ' , e )
-
         if res == None:
             return
-
         buckets = res['aggregations']['call_terms']['buckets']
-
         print(type(buckets))
         call_stat_list = []
         for bucket in buckets:
@@ -153,9 +140,7 @@ class AppLog:
                 return_detail['return_msg'] = RETURN_CODE_MSG_ENUM_DICT.get(str(returncode_bucket['key']),'UnKnow')
                 return_detail['return_num'] = returncode_bucket['doc_count']
                 return_detail_list.append(return_detail)
-
             call_detail['return_stat'] = return_detail_list
             call_stat_list.append(call_detail)
         report['call_stat'] = call_stat_list
-
         return report
