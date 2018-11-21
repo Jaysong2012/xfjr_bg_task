@@ -189,14 +189,15 @@ def send_hour_report():
         yestoday_same_call = get_yestoday_same_call(call,call_detail_yestoday)
 
         if yestoday_same_call is not None:
+            print(yestoday_same_call)
             if call_num == 0 :
                 title += str(call) + ' 接口调用数量异常今日单小时 ' + str(call_num) + ' 昨日单小时 ' + str(yestoday_same_call['call_num']) + '\n'
-            elif int(abs(call_num - yestoday_same_call['call_num']) * 100 / call_num) > 30 and (call_num - yestoday_same_call['call_num'])<0:
+            elif yestoday_same_call.get('call_num',0) != 0 and int(abs(call_num - yestoday_same_call['call_num']) * 100 / call_num) > 30 and (call_num - yestoday_same_call['call_num'])<0:
                 title +=str(call)+' 接口调用数量异常今日单小时 '+str(call_num)+' 昨日单小时 '+str(yestoday_same_call['call_num'])+'\n'
 
             if succeed_rate == 0:
                 title += str(call) + ' 接口调用通过率异常今日单小时调用成功率 ' + str(succeed_rate) + ' 昨日单小时调用成功率' + str(yestoday_same_call['succeed_rate']) + '\n'
-            elif int(abs(succeed_rate - yestoday_same_call['succeed_rate']) * 100 / succeed_rate) >10  and (succeed_rate - yestoday_same_call['succeed_rate'])<0:
+            elif yestoday_same_call.get('succeed_rate','')!='' and int(abs(succeed_rate - yestoday_same_call['succeed_rate']) * 100 / succeed_rate) >10  and (succeed_rate - yestoday_same_call['succeed_rate'])<0:
                 title += str(call)+' 接口调用通过率异常今日单小时调用成功率 '+str(succeed_rate)+' 昨日单小时调用成功率'+str(yestoday_same_call['succeed_rate'])+'\n'
 
     #
@@ -220,7 +221,7 @@ if __name__ == '__main__':
     Utils.log('start')
     #print(json.dumps(hour_report(), ensure_ascii=False))
     scheduler = Scheduler.get_sched()
-    #send_day_report()
+    #send_hour_report()
     scheduler.add_job(func=send_day_report, trigger='cron',hour=2,minute=18)
     scheduler.add_job(func=test_job, trigger='interval', minutes=1)
     scheduler.add_job(func=send_hour_report, trigger='interval', hours=1)
