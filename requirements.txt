@@ -1,2 +1,2 @@
-apscheduler==3.5.3
-elasticsearch==6.3.0
+apscheduler
+elasticsearch==6.3.1

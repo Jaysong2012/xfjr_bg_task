@@ -43,7 +43,7 @@ def day_report():
         ranges_detail['key'] = DateTimeUtil.timestamp_to_strtime((two_day_ago_begin_timestamp + i * day_timestamp_duration),'%Y-%m-%d')
         ranges.append(ranges_detail)
 
-    Utils.log(ranges)
+    Utils.log(str(ranges))
 
     return AppLog.get_range_general(two_day_ago_begin_timestamp, today_begin_timestamp, ranges)
 
