@@ -1,6 +1,8 @@
 import json
 from elasticsearch import Elasticsearch
 import hashlib
+from libraries.DateTimeUtil import DateTimeUtil
+import time,datetime
 
 class Utils:
     @staticmethod
@@ -24,4 +26,4 @@ class Utils:
     @staticmethod
     def log(content):
         with open('/data/logs/xfjr_bg_task/info.log','a') as f:
-            f.write(content+'\n')
+            f.write(DateTimeUtil.datetime_to_strtime(datetime.datetime.now())+'------'+content+'\n')

@@ -63,6 +63,9 @@ class DateTimeUtil:
 
 
 if __name__ == '__main__':
+    now_hour_begin_timestamp = DateTimeUtil.strtime_to_timestamp(DateTimeUtil.datetime_to_strtime(datetime.datetime.now(),"%Y-%m-%d %H:00:00"),"%Y-%m-%d %H:%M:%S")
+    one_hour_ago_timestamp = DateTimeUtil.strtime_to_timestamp(DateTimeUtil.datetime_to_strtime(datetime.datetime.now() - datetime.timedelta(hours=1),"%Y-%m-%d %H:00:00"),"%Y-%m-%d %H:%M:%S")
+    print(one_hour_ago_timestamp,now_hour_begin_timestamp)
     print(DateTimeUtil.get_current_day_begin_timestamp())
     # 当前时间：datetime 格式
     print(datetime.datetime.now())
